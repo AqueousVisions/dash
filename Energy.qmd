@@ -7,7 +7,7 @@ execute:
   cache: false
   freeze: false
 ---
-'''{puthon}
+'''{python}
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -15,10 +15,14 @@ import plotly.io as pio
 import json
 import requests
 import pickle
+'''
 
+'''{python}
 pd.options.plotting.backend = "plotly"
 pio.templates.default = "plotly_white"
+'''
 
+'''{python}
 df = pd.read_csv("https://raw.githubusercontent.com/guebin/DV2023/main/posts/NYCTaxi.csv").assign(
     log_trip_duration = lambda df: np.log(df.trip_duration),
     pickup_datetime = lambda df: df.pickup_datetime.apply(pd.to_datetime),
@@ -33,7 +37,8 @@ df = pd.read_csv("https://raw.githubusercontent.com/guebin/DV2023/main/posts/NYC
     dayofweek = lambda df: df.pickup_datetime.dt.dayofweek
 )
 df_small = df[::100].reset_index(drop=True)
-
+'''
+'''{python}
 #기말고사 1-(1),(2),(3)
 # | title: 요일,시간에 따른 평균속력 시각화  
 
@@ -60,9 +65,10 @@ fig = px.density_heatmap(
 
 # 그래프 표시
 fig.show()
+'''
 
+'''{python}
 # | title: 요일,시간에 따른 평균이동거리 시각화 
-
 # 데이터 전처리
 df = pd.read_csv("https://raw.githubusercontent.com/guebin/DV2023/main/posts/NYCTaxi.csv").assign(
     log_trip_duration=lambda df: np.log(df.trip_duration),
@@ -99,7 +105,9 @@ fig = px.density_heatmap(
 
 # 그래프 표시
 fig.show()
+'''
 
+'''{python}
 # 기말고사1-(3)# | title: 속력별 경로 시각화
 # 속력을 quatile에 따라 4개의 구간으로 나누기
 df_small['speed_category'] = pd.qcut(df_small['speed'], q=4, labels=['매우느림', '조금느림', '조금빠름', '매우빠름'])
@@ -147,48 +155,7 @@ fig.update_traces(
 fig.show(config={'scrollZoom': False})# 속력을 quatile에 따라 4개의 구간으로 나누기
 df_small['speed_category'] = pd.qcut(df_small['speed'], q=4, labels=['매우느림', '조금느림', '조금빠름', '매우빠름'])
 
-# Zoom 및 기타 설정
-zoom_level = 11
-
-# 대시보드 시각화
-fig = px.line_mapbox(
-    data_frame=df_small,
-    lat='dropoff_latitude',
-    lon='dropoff_longitude',
-    color='speed_category',
-    line_group='id',
-    mapbox_style='carto-positron',
-    zoom=zoom_level,
-    width=750,
-    height=600
-)
-
-# 산점도 추가
-scatter_data = px.scatter_mapbox(
-    data_frame=df_small,
-    lat='dropoff_latitude',
-    lon='dropoff_longitude',
-    size='passenger_count',
-    size_max=10,
-    color='speed_category',
-    mapbox_style='carto-positron',
-    zoom=zoom_level,
-    width=750,
-    height=600
-).data
-
-for sd in scatter_data:
-    fig.add_trace(sd)
-
-# 시각화 설정 업데이트
-fig.update_traces(
-    line={'width': 1},
-    opacity=0.8
-)
-
-# 그래프 표시
-fig.show(config={'scrollZoom': False})
 
 '''
-#
+
 
